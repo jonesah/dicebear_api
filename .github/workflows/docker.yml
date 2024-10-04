@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    uses: dicebear/api/.github/workflows/test.yml@2.x
+    uses: jonesah/dicebear_api/.github/workflows/test.yml@2.x
   push_to_registries:
     needs: test
     name: Push Docker image to multiple registries
@@ -37,7 +37,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            dicebear/api
+            jonesah/dicebear_api
             ghcr.io/${{ github.repository }}
           tags: |
             type=semver,pattern={{version}}
