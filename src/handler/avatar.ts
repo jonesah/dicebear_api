@@ -7,6 +7,7 @@ import { getRequiredFonts } from '../utils/fonts.js';
 export type AvatarRequest = {
   Params: {
     format: 'svg' | 'png' | 'jpg' | 'jpeg' | 'webp' | 'avif' | 'json';
+    seed?: string
     options?: Record<string, any>;
   };
   Querystring: Record<string, any>;
@@ -21,8 +22,11 @@ export function avatarHandler(app: FastifyInstance, core: Core, style: any) {
 
     // Validate Size for PNG Format
     if (request.params.format === 'png') {
+      options['size'] = options['s'] ? options['s'] :  options['size']
       options['size'] = options['size']
-        ? Math.min(
+        ? 
+        
+          Math.min(
             Math.max(options['size'], config.png.size.min),
             config.png.size.max
           )
@@ -31,6 +35,7 @@ export function avatarHandler(app: FastifyInstance, core: Core, style: any) {
 
     // Validate Size for JPEG Format
     if (request.params.format === 'jpg') {
+      options['size'] = options['s'] ? options['s'] :  options['size']
       options['size'] = options['size']
         ? Math.min(
             Math.max(options['size'], config.jpeg.size.min),
@@ -41,6 +46,7 @@ export function avatarHandler(app: FastifyInstance, core: Core, style: any) {
 
     // Validate Size for WebP Format
     if (request.params.format === 'webp') {
+      options['size'] = options['s'] ? options['s'] :  options['size']
       options['size'] = options['size']
         ? Math.min(
             Math.max(options['size'], config.webp.size.min),
@@ -51,6 +57,7 @@ export function avatarHandler(app: FastifyInstance, core: Core, style: any) {
 
     // Validate Size for Avif Format
     if (request.params.format === 'avif') {
+      options['size'] = options['s'] ? options['s'] :  options['size']
       options['size'] = options['size']
         ? Math.min(
             Math.max(options['size'], config.avif.size.min),
