@@ -100,7 +100,7 @@ export function avatarHandler(app: FastifyInstance, core: Core, style: any) {
       case 'jpg':
       case 'jpeg':
         reply.header('Content-Type', 'image/jpeg');
-
+//some random experiment
         const jpeg = await toJpeg(avatar.toString(), {
           includeExif: config.jpeg.exif,
           fonts: getRequiredFonts(avatar.toString(), app.fonts),
