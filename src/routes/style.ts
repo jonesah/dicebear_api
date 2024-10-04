@@ -66,5 +66,22 @@ export const styleRoutes: FastifyPluginCallback<Options> = (
     handler: avatarHandler(app, core, style),
   });
 
+  app.route<AvatarRequest>({
+    method: 'GET',
+    url: '/:format/seed/:seed/:options',
+    preValidation: async (request) => {
+      if (typeof request.params.options === 'string') {
+        request.query = parseQueryString(request.params.options);
+      }
+      request.query['seed'] = request.params.seed
+    },
+    schema: {
+      querystring: optionsSchema,
+      params: paramsSchema,
+    },
+    handler: avatarHandler(app, core, style),
+  });
+
+
   done();
 };
