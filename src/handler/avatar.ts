@@ -8,6 +8,7 @@ export type AvatarRequest = {
   Params: {
     format: 'svg' | 'png' | 'jpg' | 'jpeg' | 'webp' | 'avif' | 'json';
     seed?: string
+    parameters?: Record<string, any>;
     options?: Record<string, any>;
   };
   Querystring: Record<string, any>;

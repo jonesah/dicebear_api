@@ -2,7 +2,7 @@ import type { FastifyPluginAsync, FastifyPluginCallback } from 'fastify';
 import type { JSONSchema7Definition } from 'json-schema';
 import type { Core } from '../types.js';
 import { schemaHandler } from '../handler/schema.js';
-import { parseQueryString } from '../utils/query-string.js';
+import { parseQueryString, parseQueryStringFrom } from '../utils/query-string.js';
 import { AvatarRequest, avatarHandler } from '../handler/avatar.js';
 import { config } from '../config.js';
 
@@ -82,6 +82,34 @@ export const styleRoutes: FastifyPluginCallback<Options> = (
     handler: avatarHandler(app, core, style),
   });
 
+  app.route<AvatarRequest>({
+    method: 'GET',
+    url: '/:format/seed/:seed',
+    preValidation: async (request) => {
+      request.query['seed'] = request.params.seed
+    },
+    schema: {
+      querystring: optionsSchema,
+      params: paramsSchema,
+    },
+    handler: avatarHandler(app, core, style),
+  });
+
+  app.route<AvatarRequest>({
+    method: 'GET',
+    url: '/:format/parameters/:parameters/seed/:seed',
+    preValidation: async (request) => {
+      if (typeof request.params.parameters === 'string') {
+        request.query = parseQueryStringFrom(request.params.parameters, request.query)
+      }
+      request.query['seed'] = request.params.seed
+    },
+    schema: {
+      querystring: optionsSchema,
+      params: paramsSchema,
+    },
+    handler: avatarHandler(app, core, style),
+  });
 
   done();
 };
