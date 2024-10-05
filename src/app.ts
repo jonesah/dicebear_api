@@ -9,6 +9,8 @@ import { Font } from './types.js';
 import { fileURLToPath } from 'url';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import {Md5} from 'ts-md5';
+
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 

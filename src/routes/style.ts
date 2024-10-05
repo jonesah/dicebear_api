@@ -5,6 +5,7 @@ import { schemaHandler } from '../handler/schema.js';
 import { parseQueryString, parseQueryStringFrom } from '../utils/query-string.js';
 import { AvatarRequest, avatarHandler } from '../handler/avatar.js';
 import { config } from '../config.js';
+import {Md5} from 'ts-md5';
 
 type Options = {
   core: Core;
@@ -58,6 +59,10 @@ export const styleRoutes: FastifyPluginCallback<Options> = (
       if (typeof request.params.options === 'string') {
         request.query = parseQueryString(request.params.options);
       }
+      if(request.query["seed"]?.includes('@'))
+      {
+        request.query["seed"] = Md5.hashStr(request.query["seed"]);
+      }
     },
     schema: {
       querystring: optionsSchema,
@@ -73,6 +78,10 @@ export const styleRoutes: FastifyPluginCallback<Options> = (
       if (typeof request.params.options === 'string') {
         request.query = parseQueryString(request.params.options);
       }
+      if(request.params.seed?.includes('@'))
+      {
+        request.params.seed = Md5.hashStr(request.params.seed);
+      }
       request.query['seed'] = request.params.seed
     },
     schema: {
@@ -86,7 +95,11 @@ export const styleRoutes: FastifyPluginCallback<Options> = (
     method: 'GET',
     url: '/:format/seed/:seed',
     preValidation: async (request) => {
-      request.query['seed'] = request.params.seed
+      if(request.params.seed?.includes('@'))
+      {
+        request.params.seed = Md5.hashStr(request.params.seed);
+      }
+      request.query['seed'] = request.params.seed;
     },
     schema: {
       querystring: optionsSchema,
@@ -100,7 +113,11 @@ export const styleRoutes: FastifyPluginCallback<Options> = (
     url: '/:format/parameters/:parameters/seed/:seed',
     preValidation: async (request) => {
       if (typeof request.params.parameters === 'string') {
-        request.query = parseQueryStringFrom(request.params.parameters, request.query)
+        request.query = parseQueryStringFrom(request.params.parameters, request.query);
+      }
+      if(request.params.seed?.includes('@'))
+      {
+        request.params.seed = Md5.hashStr(request.params.seed);
       }
       request.query['seed'] = request.params.seed
     },
