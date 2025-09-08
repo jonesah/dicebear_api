@@ -4,10 +4,7 @@ import woff2Rs from '@woff2/woff2-rs';
 import { promises as fs, existsSync } from 'fs';
 import { fileURLToPath } from 'node:url';
 
-type Font = {
-  font: string;
-  ranges: [number, number][];
-};
+type Font = { font: string; ranges: [number, number][] };
 
 const require = createRequire(import.meta.url);
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -36,8 +33,10 @@ for (const fontPackage of FONT_PACKAGES) {
   }
 
   await fs.copyFile(
-    require.resolve(`${FONT_NAMESPACE}/${fontPackage}/LICENSE`),
-    path.join(fontPathTargetDir, 'LICENSE')
+    require
+      .resolve(`${FONT_NAMESPACE}/${fontPackage}/index.css`)
+      .replace('index.css', 'LICENSE'),
+    path.join(fontPathTargetDir, 'LICENSE'),
   );
 
   const unicodeMetadata: Record<string, string> = (
@@ -70,7 +69,7 @@ for (const fontPackage of FONT_PACKAGES) {
     const subsetName = subset.replace(/[\[\]]/g, '');
 
     const fontPathSource = require.resolve(
-      `${FONT_NAMESPACE}/${fontPackage}/files/${fontPackage}-${subsetName}-400-normal.woff2`
+      `${FONT_NAMESPACE}/${fontPackage}/files/${fontPackage}-${subsetName}-400-normal.woff2`,
     );
 
     const fontFileName = path.basename(fontPathSource, '.woff2') + '.ttf';
@@ -90,5 +89,5 @@ for (const fontPackage of FONT_PACKAGES) {
 
 await fs.writeFile(
   path.join(TARGET_DIR, 'fonts.json'),
-  JSON.stringify(fonts, null, 2)
+  JSON.stringify(fonts, null, 2),
 );
